@@ -1,4 +1,5 @@
 # Module - Azure Storage Account
+[![COE](https://img.shields.io/badge/Created%20By-CCoE-blue)]()
 [![HCL](https://img.shields.io/badge/language-HCL-blueviolet)](https://www.terraform.io/)
 [![Azure](https://img.shields.io/badge/provider-Azure-blue)](https://registry.terraform.io/providers/hashicorp/azurerm/latest)
 
@@ -35,14 +36,11 @@ module "<storage-account-name>" {
     "key1"  = "value1"
     "key2"        = "value2"
   }
-  containers = { 
-    <container-name> = {
+  container = {    
       name                  = "<container-name>",
       container_access_type = "<private>"
-      ad_group              = "<azure group ad>"
-    }
+      ad_group              = "<azure group ad>"    
   }
-  containers_rbac = true  
 }
 output "name" {
   value = module.storage-account-name.name
@@ -92,8 +90,7 @@ output "id" {
 | sftp_enabled | Boolean, enable SFTP for the storage account | `bool` | `False` | No |
 | tags | tags for the resource | `map(string)` | `{}` | No |
 | azure_ad_groups | list of azure AD groups that will be granted the Application Insights Component Contributor role  | `list` | `[]` | No |
-| containers | specifies the list of containers to be created in the storage account | `map(object{})` | `{}` | No |
-| containers_rbac | specifies if the rbac should be applied for the container | `bool` | `false` | No |
+| container | parameters for container creation | `object({})` | `{}` | No |
 
 
 ## Objects and map variables list of acceptable parameters
@@ -170,8 +167,8 @@ output "id" {
 | immutability_policy | period_since_creation_in_days | The immutability period for the blobs in the container since the policy creation, in days | `number` | `null` | No |
 | sas_policy | expiration_period | The SAS expiration period in format of DD.HH:MM:SS | `string` | `null` | `Yes` |
 | sas_policy | expiration_action | The SAS expiration action. The only possible value is Log at this moment | `string` | `Log` | No |
-| containers | name | container name | `string` | `null` | No |
-| containers | container_access_type | blob, private etc | `string` | `null` | No |
+| container | name | container name | `string` | `null` | `Yes` |
+| container | container_access_type | blob, private etc | `string` | `null` | No |
 | containers | ad_group | azure group object id | `string` | `null` | No |
 
 ## Output variables
@@ -184,17 +181,3 @@ output "id" {
 ## Documentation
 Terraform Azure Storage Account: <br>
 [https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account)
-
-# Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
